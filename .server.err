@@ -1,0 +1,6 @@
+ ⨯ Error [AuthError]: This area is for hostel administrators.
+    at j (C:\Users\Admin\Desktop\40\.next\server\app\api\realtime\stream\route.js:24:1135)
+    at async l (C:\Users\Admin\Desktop\40\.next\server\app\app\admin\page.js:48:11779) {
+  code: 'forbidden',
+  digest: '2339944518'
+}

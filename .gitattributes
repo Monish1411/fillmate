@@ -1,0 +1,9 @@
+* text=auto eol=lf
+
+# Keep generated migrations and lockfiles out of diffs
+package-lock.json linguist-generated=true
+supabase/migrations/0001_core_schema.sql linguist-generated=true
+
+# Binary assets
+*.png binary
+*.webp binary

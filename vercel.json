@@ -1,0 +1,17 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "regions": ["bom1"],
+  "crons": [
+    {
+      "path": "/api/cron/daily-digest",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/rotation-reminders",
+      "schedule": "0 7 * * *"
+    }
+  ]
+}

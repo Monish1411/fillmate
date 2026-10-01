@@ -1,0 +1,13 @@
+{
+  // The Tailwind language server understands v4 at-rules (@theme, @utility,
+  // @custom-variant). The built-in CSS server does not, and reports them as
+  // unknown at-rules, so we hand CSS files to Tailwind instead.
+  "css.validate": false,
+  "css.languages": {
+    "css": "tailwindcss"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["class(Name)?\\s*=\\s*[\"`]([^\"'`]*).*?[\"`]", 1]
+  ],
+  "files.eol": "\n"
+}

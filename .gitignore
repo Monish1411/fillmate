@@ -1,0 +1,50 @@
+# deps
+node_modules/
+.pnp
+.pnp.js
+
+# next
+.next/
+out/
+build/
+next-env.d.ts
+
+# production
+dist/
+
+# env
+.env
+.env.local
+.env*.local
+
+# local data (sqlite driver + local object storage)
+.data/
+
+# misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# normalize line endings
+* text=auto eol=lf
+
+# lockfiles & config
+package-lock.json linguist-generated=true
+pnpm-lock.yaml linguist-generated=true
+yarn.lock linguist-generated=true
+
+# typescript
+*.tsbuildinfo
+
+# editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+.idea/*.log

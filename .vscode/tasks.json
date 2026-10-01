@@ -1,0 +1,40 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Reset TypeScript server",
+      "type": "shell",
+      "command": "echo Closing stale editor buffers and clearing build caches...",
+      "windows": {
+        "command": "powershell -NoProfile -Command \"Remove-Item -Force -ErrorAction SilentlyContinue tsconfig.tsbuildinfo, .next\\cache\\.tsbuildinfo; Write-Host 'Caches cleared. Now run: TypeScript: Restart TS Server (or Ctrl+Shift+P > Developer: Reload Window)' -ForegroundColor Cyan\""
+      },
+      "linux": {
+        "command": "echo \"Caches cleared. Now run: TypeScript: Restart TS Server (or Ctrl+Shift+P > Developer: Reload Window)\""
+      },
+      "osx": {
+        "command": "echo \"Caches cleared. Now run: TypeScript: Restart TS Server (or Cmd+Shift+P > Developer: Reload Window)\""
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Verify: typecheck",
+      "type": "shell",
+      "command": "npx tsc --noEmit --pretty false",
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "Verify: build",
+      "type": "shell",
+      "command": "npm run build",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Verify: database doctor",
+      "type": "shell",
+      "command": "npm run db:doctor",
+      "problemMatcher": []
+    }
+  ]
+}
