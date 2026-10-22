@@ -39,7 +39,7 @@ export async function createInvite(params: {
     await sql.execute(
       `INSERT INTO "invites"
          ("id", "code", "room_id", "hostel_id", "created_by", "max_uses", "uses", "expires_at", "revoked", "created_at")
-       VALUES (?, ?, ?, ?, ?, ?, 0, ?, 0, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, 0, ?, FALSE, ?)`,
       [id, code, params.roomId, params.hostelId, params.createdBy, params.maxUses, expiresAt, new Date().toISOString()],
     );
     const rows = await sql.query<InviteRow>(`SELECT * FROM "invites" WHERE "id" = ?`, [id]);
@@ -102,7 +102,7 @@ export async function previewInvite(code: string): Promise<InvitePreview> {
 export async function consumeInvite(inviteId: string): Promise<boolean> {
   const sql = await getSql();
   const changed = await sql.execute(
-    `UPDATE "invites" SET "uses" = "uses" + 1 WHERE "id" = ? AND "uses" < "max_uses" AND "revoked" = 0`,
+    `UPDATE "invites" SET "uses" = "uses" + 1 WHERE "id" = ? AND "uses" < "max_uses" AND "revoked" = FALSE`,
     [inviteId],
   );
   return changed > 0;
@@ -110,7 +110,7 @@ export async function consumeInvite(inviteId: string): Promise<boolean> {
 
 export async function revokeInvite(inviteId: string): Promise<void> {
   const sql = await getSql();
-  await sql.execute(`UPDATE "invites" SET "revoked" = 1 WHERE "id" = ?`, [inviteId]);
+  await sql.execute(`UPDATE "invites" SET "revoked" = TRUE WHERE "id" = ?`, [inviteId]);
 }
 
 export async function listInvites(roomId: string): Promise<InviteRow[]> {

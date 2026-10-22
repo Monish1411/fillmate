@@ -25,7 +25,7 @@ export async function GET(request: Request): Promise<Response> {
   const sql = await getSql();
   const rooms = await sql.query<{ id: string; timezone: string }>(
     `SELECT r."id", h."timezone" FROM "rooms" r JOIN "hostels" h ON h."id" = r."hostel_id"
-      WHERE r.active = 1`,
+      WHERE r."active" = TRUE`,
   );
 
   let reminders = 0;

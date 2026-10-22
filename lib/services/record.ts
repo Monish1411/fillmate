@@ -35,7 +35,7 @@ async function resolveRequestedCooler(
   if (!requestedId) return fallback;
   const sql = await getSql();
   const rows = await sql.query<CoolerRow>(
-    `SELECT * FROM "coolers" WHERE "id" = ? AND "hostel_id" = ? AND active = 1 LIMIT 1`,
+    `SELECT * FROM "coolers" WHERE "id" = ? AND "hostel_id" = ? AND "active" = TRUE LIMIT 1`,
     [requestedId, hostelId],
   );
   return rows[0] ?? fallback;
@@ -184,7 +184,7 @@ export async function recordRefill(
         decision.outcome.cooler_detected,
         decision.outcome.bottles_detected,
         decision.outcome.filling_context_detected,
-        duplicate ? 1 : 0,
+        duplicate,
         decision.signals.duplicateOfId,
         processed?.sha256 ?? null,
         processed?.phash ?? null,
@@ -193,7 +193,7 @@ export async function recordRefill(
         location.accuracy,
         location.distanceMeters,
         location.status,
-        input.qrCode ? 1 : 0,
+        Boolean(input.qrCode),
         input.clientTimestamp ?? null,
         serverTimestamp,
         timezone,
@@ -244,7 +244,7 @@ export async function recordRefill(
         decision.outcome.cooler_detected,
         decision.outcome.bottles_detected,
         decision.outcome.filling_context_detected,
-        decision.outcome.duplicate_suspected ? 1 : 0,
+        decision.outcome.duplicate_suspected,
         decision.outcome.reason,
         JSON.stringify(decision.outcome.raw ?? {}),
         decision.outcome.latencyMs,

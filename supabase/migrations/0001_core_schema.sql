@@ -50,18 +50,18 @@ CREATE TABLE IF NOT EXISTS "users" (
   "avatar_url" TEXT,
   "role" TEXT DEFAULT 'student',
   "hostel_id" TEXT REFERENCES "hostels"("id") ON DELETE CASCADE,
-  "email_verified" BOOLEAN DEFAULT 0,
+  "email_verified" BOOLEAN DEFAULT FALSE,
   "onboarding_step" INTEGER DEFAULT 0,
-  "onboarded" BOOLEAN DEFAULT 0,
+  "onboarded" BOOLEAN DEFAULT FALSE,
   "theme" TEXT DEFAULT 'system',
   "timezone" TEXT DEFAULT 'Asia/Kolkata',
-  "notify_refills" BOOLEAN DEFAULT 1,
-  "notify_rotation" BOOLEAN DEFAULT 1,
-  "notify_reviews" BOOLEAN DEFAULT 1,
-  "notify_weekly" BOOLEAN DEFAULT 0,
-  "privacy_show_contributions" BOOLEAN DEFAULT 1,
-  "privacy_show_activity" BOOLEAN DEFAULT 1,
-  "privacy_show_name" BOOLEAN DEFAULT 1,
+  "notify_refills" BOOLEAN DEFAULT TRUE,
+  "notify_rotation" BOOLEAN DEFAULT TRUE,
+  "notify_reviews" BOOLEAN DEFAULT TRUE,
+  "notify_weekly" BOOLEAN DEFAULT FALSE,
+  "privacy_show_contributions" BOOLEAN DEFAULT TRUE,
+  "privacy_show_activity" BOOLEAN DEFAULT TRUE,
+  "privacy_show_name" BOOLEAN DEFAULT TRUE,
   "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   "last_seen_at" TIMESTAMPTZ
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS "rooms" (
   "bottle_target" INTEGER DEFAULT 4,
   "refill_deadline_hour" INTEGER DEFAULT 21,
   "invite_code" TEXT NOT NULL,
-  "active" BOOLEAN DEFAULT 1,
+  "active" BOOLEAN DEFAULT TRUE,
   "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX "ix_rooms_hostel_id" ON "rooms" ("hostel_id");
@@ -108,8 +108,8 @@ CREATE TABLE IF NOT EXISTS "coolers" (
   "latitude" DOUBLE PRECISION,
   "longitude" DOUBLE PRECISION,
   "allowed_radius_m" DOUBLE PRECISION DEFAULT 60,
-  "location_enforced" BOOLEAN DEFAULT 0,
-  "active" BOOLEAN DEFAULT 1,
+  "location_enforced" BOOLEAN DEFAULT FALSE,
+  "active" BOOLEAN DEFAULT TRUE,
   "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX "ix_coolers_hostel_id" ON "coolers" ("hostel_id");
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS "water_activities" (
   "cooler_detected" BOOLEAN,
   "bottles_detected" INTEGER,
   "filling_context_detected" BOOLEAN,
-  "duplicate_suspected" BOOLEAN DEFAULT 0,
+  "duplicate_suspected" BOOLEAN DEFAULT FALSE,
   "duplicate_of" TEXT REFERENCES "water_activities"("id") ON DELETE CASCADE,
   "image_hash" TEXT,
   "perceptual_hash" TEXT,
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS "water_activities" (
   "location_accuracy" DOUBLE PRECISION,
   "distance_from_cooler_m" DOUBLE PRECISION,
   "location_status" TEXT DEFAULT 'unavailable',
-  "qr_scanned" BOOLEAN DEFAULT 0,
+  "qr_scanned" BOOLEAN DEFAULT FALSE,
   "client_timestamp" TIMESTAMPTZ,
   "server_timestamp" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   "timezone" TEXT DEFAULT 'Asia/Kolkata',
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS "ai_verifications" (
   "cooler_detected" BOOLEAN,
   "bottles_detected" INTEGER,
   "filling_context_detected" BOOLEAN,
-  "duplicate_suspected" BOOLEAN DEFAULT 0,
+  "duplicate_suspected" BOOLEAN DEFAULT FALSE,
   "reason" TEXT,
   "raw_response" TEXT,
   "latency_ms" INTEGER,
@@ -304,7 +304,7 @@ CREATE TABLE IF NOT EXISTS "invites" (
   "max_uses" INTEGER DEFAULT 12,
   "uses" INTEGER DEFAULT 0,
   "expires_at" TIMESTAMPTZ,
-  "revoked" BOOLEAN DEFAULT 0,
+  "revoked" BOOLEAN DEFAULT FALSE,
   "created_at" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX "ix_invites_code" ON "invites" ("code");

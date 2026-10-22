@@ -70,12 +70,12 @@ export async function getMetrics(
   }>(
     `SELECT
        (SELECT COUNT(*) FROM "users" WHERE "hostel_id" = ?) AS "total_students",
-       (SELECT COUNT(*) FROM "rooms" WHERE "hostel_id" = ? AND active = 1) AS "total_rooms",
+       (SELECT COUNT(*) FROM "rooms" WHERE "hostel_id" = ? AND "active" = TRUE) AS "total_rooms",
        COALESCE(SUM(CASE WHEN "server_timestamp" >= ? THEN 1 ELSE 0 END), 0) AS "today_refills",
        COALESCE(SUM("bottle_count"), 0) AS "bottles",
        COALESCE(SUM(CASE WHEN "status" = 'verified' THEN 1 ELSE 0 END), 0) AS "verified",
        COALESCE(SUM(CASE WHEN "ai_confidence" IS NOT NULL THEN 1 ELSE 0 END), 0) AS "scored",
-       COALESCE(SUM(CASE WHEN "duplicate_suspected" = 1 THEN 1 ELSE 0 END), 0) AS "flagged",
+       COALESCE(SUM(CASE WHEN "duplicate_suspected" = TRUE THEN 1 ELSE 0 END), 0) AS "flagged",
        COALESCE(SUM(CASE WHEN "review_status" = 'pending' THEN 1 ELSE 0 END), 0) AS "pending"
      FROM "water_activities"
     WHERE "hostel_id" = ? AND "deleted_at" IS NULL
@@ -259,7 +259,7 @@ export async function getRoomBreakdown(
               WHERE w."room_id" = r."id" AND w."deleted_at" IS NULL
                 AND w."server_timestamp" >= ? AND w."server_timestamp" <= ?) AS "last_refill_at"
        FROM "rooms" r
-      WHERE r."hostel_id" = ? AND r.active = 1
+      WHERE r."hostel_id" = ? AND r."active" = TRUE
       ORDER BY "bottles" DESC`,
     [range.fromIso, range.toIso, hostelId],
   );

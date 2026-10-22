@@ -144,7 +144,7 @@ async function computeStreak(userId: string, tz: string): Promise<number> {
 
 export async function updateUserProfile(
   userId: string,
-  fields: Record<string, string | number | null>,
+  fields: Record<string, string | number | boolean | null>,
 ): Promise<void> {
   const sql = await getSql();
   const keys = Object.keys(fields);

@@ -170,7 +170,7 @@ export async function completeOnboarding(ctx: AuthContext): Promise<void> {
   }
   const sql = await getSql();
   await sql.execute(
-    `UPDATE "users" SET "onboarding_step" = 5, "onboarded" = 1, "updated_at" = ? WHERE "id" = ?`,
+    `UPDATE "users" SET "onboarding_step" = 5, "onboarded" = TRUE, "updated_at" = ? WHERE "id" = ?`,
     [new Date().toISOString(), ctx.user.id],
   );
   const room = await getRoom(ctx.roomId);
@@ -195,7 +195,7 @@ export async function joinViaInvite(
 ): Promise<{ roomId: string; roomNumber: string; hostelId: string }> {
   const sql = await getSql();
   const rows = await sql.query<{ room_id: string; hostel_id: string }>(
-    `SELECT "room_id", "hostel_id" FROM "invites" WHERE "id" = ? AND revoked = 0 LIMIT 1`,
+    `SELECT "room_id", "hostel_id" FROM "invites" WHERE "id" = ? AND "revoked" = FALSE LIMIT 1`,
     [inviteId],
   );
   const invite = rows[0];

@@ -18,7 +18,7 @@ export async function getRoom(roomId: string): Promise<RoomRow | null> {
 export async function listRooms(hostelId: string, includeInactive = false): Promise<RoomRow[]> {
   const sql = await getSql();
   return sql.query<RoomRow>(
-    `SELECT * FROM "rooms" WHERE "hostel_id" = ? ${includeInactive ? "" : "AND active = 1"}
+    `SELECT * FROM "rooms" WHERE "hostel_id" = ? ${includeInactive ? "" : `AND "active" = TRUE`}
       ORDER BY "number" ASC`,
     [hostelId],
   );
@@ -30,7 +30,7 @@ export async function findRoomByNumber(
 ): Promise<RoomRow | null> {
   const sql = await getSql();
   const rows = await sql.query<RoomRow>(
-    `SELECT * FROM "rooms" WHERE "hostel_id" = ? AND LOWER("number") = LOWER(?) AND active = 1 LIMIT 1`,
+    `SELECT * FROM "rooms" WHERE "hostel_id" = ? AND LOWER("number") = LOWER(?) AND "active" = TRUE LIMIT 1`,
     [hostelId, number],
   );
   return rows[0] ?? null;
@@ -44,13 +44,13 @@ export async function getCoolers(
   if (roomId) {
     return sql.query<CoolerRow>(
       `SELECT * FROM "coolers"
-        WHERE "hostel_id" = ? AND active = 1 AND ("room_id" = ? OR "room_id" IS NULL)
+        WHERE "hostel_id" = ? AND "active" = TRUE AND ("room_id" = ? OR "room_id" IS NULL)
         ORDER BY "label" ASC`,
       [hostelId, roomId],
     );
   }
   return sql.query<CoolerRow>(
-    `SELECT * FROM "coolers" WHERE "hostel_id" = ? AND active = 1 ORDER BY "label" ASC`,
+    `SELECT * FROM "coolers" WHERE "hostel_id" = ? AND "active" = TRUE ORDER BY "label" ASC`,
     [hostelId],
   );
 }

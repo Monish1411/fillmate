@@ -61,7 +61,7 @@ export async function runSeed() {
       `INSERT INTO "users"
          ("id","email","password_hash","full_name","role","hostel_id","onboarding_step",
           "onboarded","theme","timezone","email_verified","created_at","updated_at")
-       VALUES (?,?,?,?,?,?,5,1,'system',?,1,?,?)`,
+       VALUES (?,?,?,?,?,?,5,TRUE,'system',?,TRUE,?,?)`,
       [id, email.toLowerCase(), passwordHash, name, role, hostelId, TZ, now, now],
     );
     return id;
@@ -150,10 +150,10 @@ export async function runSeed() {
       [
         id, opts.userId, opts.hostelId, opts.roomId, opts.coolerId, opts.bottles,
         opts.status, opts.confidence,
-        opts.status === "verified" ? 1 : 0,
+        opts.status === "verified",
         opts.status === "verified" ? opts.bottles : null,
-        opts.status === "verified" ? 1 : 0,
-        opts.duplicate ? 1 : 0,
+        opts.status === "verified",
+        opts.duplicate,
         opts.duplicate ? `seedhash-${opts.roomId}` : `hash-${id}`,
         opts.duplicate ? "ffffffffffffffff" : null,
         opts.distance === null ? null : 18.5264,
@@ -174,10 +174,10 @@ export async function runSeed() {
        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         uuid(), id, "seed", "demo-corpus", opts.status, opts.confidence,
-        opts.status === "verified" ? 1 : 0,
+        opts.status === "verified",
         opts.status === "verified" ? opts.bottles : null,
-        opts.status === "verified" ? 1 : 0,
-        opts.duplicate ? 1 : 0,
+        opts.status === "verified",
+        opts.duplicate,
         opts.duplicate
           ? "This exact photo has already been submitted as evidence."
           : opts.status === "verified"

@@ -33,10 +33,10 @@ export const PATCH = route(async (request: Request) => {
   }
 
   const prefs = preferencesSchema.parse(body);
-  const patch: Record<string, number> = {};
+  const patch: Record<string, number | boolean> = {};
   for (const [key, value] of Object.entries(prefs)) {
     const column = PREF_COLUMNS[key];
-    if (column && typeof value === "boolean") patch[column] = value ? 1 : 0;
+    if (column && typeof value === "boolean") patch[column] = value;
   }
   if (Object.keys(patch).length > 0) await updateUserProfile(ctx.user.id, patch);
 

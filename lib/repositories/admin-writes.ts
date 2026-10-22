@@ -82,7 +82,7 @@ export async function createRoom(params: {
     `INSERT INTO "rooms"
        ("id", "hostel_id", "number", "floor", "bottle_target",
         "refill_deadline_hour", "invite_code", "active", "created_at")
-     VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)`,
+     VALUES (?, ?, ?, ?, ?, ?, ?, TRUE, ?)`,
     [
       id,
       params.hostelId,
@@ -133,7 +133,7 @@ export async function updateRoom(
 ): Promise<void> {
   const sql = await getSql();
   const sets: string[] = [];
-  const params: Array<string | number | null> = [];
+  const params: Array<string | number | boolean | null> = [];
   if (patch.number !== undefined) {
     sets.push(`"number" = ?`);
     params.push(patch.number);
@@ -152,7 +152,7 @@ export async function updateRoom(
   }
   if (patch.active !== undefined) {
     sets.push(`"active" = ?`);
-    params.push(patch.active ? 1 : 0);
+    params.push(patch.active);
   }
   if (sets.length === 0) return;
   await sql.execute(`UPDATE "rooms" SET ${sets.join(", ")} WHERE "id" = ?`, [...params, roomId]);
@@ -174,7 +174,7 @@ export async function createCooler(params: {
     `INSERT INTO "coolers"
        ("id", "hostel_id", "room_id", "label", "qr_code", "latitude", "longitude",
         "allowed_radius_m", "location_enforced", "active", "created_at")
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`,
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE, ?)`,
     [
       id,
       params.hostelId,
@@ -184,7 +184,7 @@ export async function createCooler(params: {
       params.latitude ?? null,
       params.longitude ?? null,
       params.allowedRadiusM ?? 60,
-      params.locationEnforced ? 1 : 0,
+      params.locationEnforced,
       now,
     ],
   );
@@ -216,7 +216,7 @@ export async function updateCooler(
 ): Promise<void> {
   const sql = await getSql();
   const sets: string[] = [];
-  const params: Array<string | number | null> = [];
+  const params: Array<string | number | boolean | null> = [];
   if (patch.label !== undefined) {
     sets.push(`"label" = ?`);
     params.push(patch.label);
@@ -235,11 +235,11 @@ export async function updateCooler(
   }
   if (patch.locationEnforced !== undefined) {
     sets.push(`"location_enforced" = ?`);
-    params.push(patch.locationEnforced ? 1 : 0);
+    params.push(patch.locationEnforced);
   }
   if (patch.active !== undefined) {
     sets.push(`"active" = ?`);
-    params.push(patch.active ? 1 : 0);
+    params.push(patch.active);
   }
   if (sets.length === 0) return;
   await sql.execute(`UPDATE "coolers" SET ${sets.join(", ")} WHERE "id" = ?`, [...params, coolerId]);
@@ -247,7 +247,7 @@ export async function updateCooler(
 
 export async function deactivateCooler(coolerId: string): Promise<void> {
   const sql = await getSql();
-  await sql.execute(`UPDATE "coolers" SET "active" = 0 WHERE "id" = ?`, [coolerId]);
+  await sql.execute(`UPDATE "coolers" SET "active" = FALSE WHERE "id" = ?`, [coolerId]);
 }
 
 export async function setUserRole(

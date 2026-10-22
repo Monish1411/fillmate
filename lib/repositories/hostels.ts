@@ -1,6 +1,7 @@
 import "server-only";
 import { getSql } from "@/lib/db/client";
 import { DEFAULT_FEATURES, type FeatureConfig, type FeatureFlag } from "@/types/core";
+import { parseJson } from "@/lib/db/sql";
 import type { HostelRow, OrganizationRow } from "@/types/core";
 
 export interface HostelSettings extends FeatureConfig {
@@ -19,13 +20,7 @@ export const DEFAULT_HOSTEL_SETTINGS: HostelSettings = {
 };
 
 export function parseSettings(raw: string | null | undefined): HostelSettings {
-  if (!raw) return { ...DEFAULT_HOSTEL_SETTINGS };
-  try {
-    const parsed = JSON.parse(raw) as Partial<HostelSettings>;
-    return { ...DEFAULT_HOSTEL_SETTINGS, ...parsed };
-  } catch {
-    return { ...DEFAULT_HOSTEL_SETTINGS };
-  }
+  return parseJson(raw, { ...DEFAULT_HOSTEL_SETTINGS });
 }
 
 export async function getHostel(hostelId: string): Promise<HostelRow | null> {
@@ -131,11 +126,7 @@ export async function getSystemSetting<T = Record<string, unknown>>(
     [key],
   );
   if (!rows[0]) return fallback;
-  try {
-    return { ...fallback, ...(JSON.parse(rows[0].value) as T) };
-  } catch {
-    return fallback;
-  }
+  return parseJson(rows[0].value, fallback);
 }
 
 export async function setSystemSetting(

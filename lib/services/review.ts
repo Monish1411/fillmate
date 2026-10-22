@@ -79,7 +79,7 @@ export async function reviewActivity(
          ("id", "activity_id", "provider", "model", "status", "confidence",
           "cooler_detected", "bottles_detected", "filling_context_detected",
           "duplicate_suspected", "reason", "raw_response", "latency_ms", "created_at")
-       VALUES (?, ?, 'manual', 'human-review', ?, NULL, NULL, NULL, NULL, 0, ?, ?, 0, ?)`,
+       VALUES (?, ?, 'manual', 'human-review', ?, NULL, NULL, NULL, NULL, FALSE, ?, ?, 0, ?)`,
       [
         uuid(),
         activityId,

@@ -85,7 +85,7 @@ export async function assertRoomAccess(
 ): Promise<{ hostelId: string; memberUserIds: string[] }> {
   const sql = await getSql();
   const room = await sql.query<{ id: string; hostel_id: string }>(
-    `SELECT "id", "hostel_id" FROM "rooms" WHERE "id" = ? AND "active" = 1 LIMIT 1`,
+    `SELECT "id", "hostel_id" FROM "rooms" WHERE "id" = ? AND "active" = TRUE LIMIT 1`,
     [roomId],
   );
   const found = room[0];

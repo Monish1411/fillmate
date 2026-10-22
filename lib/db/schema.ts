@@ -343,11 +343,24 @@ export const TABLES: TableDef[] = [
 ];
 /* ── DDL rendering ───────────────────────────────────────────── */
 
-function renderDefault(d: string | number | boolean, dialect: Dialect): string {
+function renderDefault(
+  d: string | number | boolean,
+  dialect: Dialect,
+  kind?: ColumnKind,
+): string {
   if (d === "now") {
     // SQLite stores ISO text via strftime; Postgres has native now()
     return dialect === "postgres" ? "CURRENT_TIMESTAMP" : "(strftime('%Y-%m-%dT%H:%M:%fZ','now'))";
   }
+
+  // Boolean columns are BOOLEAN in Postgres, which rejects integer literals
+  // like `DEFAULT 0` / `DEFAULT 1`. Render the native literals instead.
+  if (kind === "bool") {
+    const truthy = typeof d === "boolean" ? d : Number(d) !== 0;
+    if (dialect === "postgres") return truthy ? "TRUE" : "FALSE";
+    return truthy ? "1" : "0";
+  }
+
   if (typeof d === "number") return String(d);
   return String(d);
 }
@@ -386,7 +399,7 @@ function columnSql(col: ColumnDef, dialect: Dialect): string {
   }
 
   if (col.default !== undefined) {
-    parts.push(`DEFAULT ${renderDefault(col.default, dialect)}`);
+    parts.push(`DEFAULT ${renderDefault(col.default, dialect, col.kind)}`);
   }
   if (!col.nullable && col.default === undefined) parts.push("NOT NULL");
   if (col.kind === "ref" && col.ref) {

@@ -41,7 +41,7 @@ export async function signUp(raw: {
     `INSERT INTO "users"
        ("id", "email", "password_hash", "full_name", "phone", "role", "hostel_id",
         "onboarding_step", "onboarded", "theme", "timezone", "created_at", "updated_at")
-     VALUES (?, ?, ?, ?, ?, 'student', NULL, 0, 0, 'system', ?, ?, ?)`,
+     VALUES (?, ?, ?, ?, ?, 'student', NULL, 0, FALSE, 'system', ?, ?, ?)`,
     [
       id,
       input.email,
@@ -117,7 +117,7 @@ export async function ensureSuperAdmin(
     `INSERT INTO "users"
        ("id", "email", "password_hash", "full_name", "role", "onboarding_step", "onboarded",
         "theme", "timezone", "email_verified", "created_at", "updated_at")
-     VALUES (?, ?, ?, ?, 'super_admin', 5, 1, 'system', ?, 1, ?, ?)`,
+     VALUES (?, ?, ?, ?, 'super_admin', 5, TRUE, 'system', ?, TRUE, ?, ?)`,
     [id, email.toLowerCase(), await hashPassword(password), "Platform Admin", "Asia/Kolkata", now, now],
   );
   return true;
