@@ -31,6 +31,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# local dev server logs
+*.log
+.server.err
+.prod.log
+.server.log
+
 # normalize line endings
 * text=auto eol=lf
 
@@ -48,3 +54,14 @@ yarn.lock linguist-generated=true
 !.vscode/settings.json
 !.vscode/tasks.json
 .idea/*.log
+
+# supabase cli scratch
+supabase/.temp/
+
+# local scratch scripts
+.tmp-*.ps1
+
+# unrelated local documents (not part of the app)
+Group_*.docx
+Group_*.pdf
+build_*_report.py

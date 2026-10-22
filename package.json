@@ -19,8 +19,7 @@
     "gen:icons": "node --conditions=react-server --import tsx scripts/generate-icons.ts",
     "gen:migrations": "node --conditions=react-server --import tsx scripts/generate-migrations.ts",
     "test:e2e": "node scripts/e2e.mjs",
-    "db:doctor": "node --conditions=react-server --import tsx scripts/db-doctor.ts",
-    "reset:editor": "node --conditions=react-server --import tsx scripts/reset-editor-state.ts"
+    "db:doctor": "node --conditions=react-server --import tsx scripts/db-doctor.ts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "1.2.6",
